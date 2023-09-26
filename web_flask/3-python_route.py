@@ -28,7 +28,6 @@ def python_is_cool(text='is_cool'):
     """ Prints a Message when /python is called """
     return "Python " + text.replace('_', ' ')
 
-
 if __name__ == "__main__":
     """ Main Function """
     app.run(host='0.0.0.0', port=5000)
