@@ -30,14 +30,6 @@ $(document).ready(function () {
     }
   });
 });
-
-fetch('http://localhost:5001/api/v1/status')
-  .then(response => response.json())
-  .then(data => {
-    if (data.status == 'OK') {
-      document.querySelector('div#api_status').classList.add('available');
-    }
-  })
 fetch('http://localhost:5001/api/v1/places_search', {
   method: 'POST',
   body: JSON.stringify({}),
