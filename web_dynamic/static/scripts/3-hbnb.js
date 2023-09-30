@@ -1,36 +1,32 @@
 $(document).ready(function () {
-  // Initialize an empty array to store Amenity IDs
-  let selectedAmenities = [];
+  let selectAmenities = {};
 
-  // Listen for changes on all checkboxes with class "checkbox"
-  $(".checkbox").on("change", function () {
-    let id = $(this).data('id');
-    let name = $(this).data('name');
+  $('input[type="checkbox"]').change(function () {
+    let amenityID = $(this).data('id');
+    let amenityName = $(this).data('name');
 
-    if ($(this).is(":checked")) {
-      // Checkbox is checked, add Amenity ID to the array
-      selectedAmenities.push(name);
+    if ($(this).is(':checked')) {
+      selectAmenities[amenityID] = amenityName;
     } else {
-      // Checkbox is unchecked, remove Amenity ID from the array
-      const index = selectedAmenities.indexOf(name);
-      if (index !== -1) {
-        selectedAmenities.splice(index, 1);
-      }
+      delete selectAmenities[amenityID];
     }
 
-    // Update the content of the <h4> element with the selected amenities
-    $('.amenities h4').html(selectedAmenities.join(", "));
+    let amenities = Object.values(selectAmenities).join(', ');
+    if (amenities.length > 30) {
+      amenities = amenities.substring(0, 30) + "...";
+    }
+    $('.amenities h4').text(amenities);
   });
-});
-
-$(document).ready(function () {
-  $.get("http://0.0.0.0:5001/api/v1/status/", function (data, status, xhr) {
-    if (xhr.status >= 200 && xhr.status <= 299) {
-      // API is available, add the "available" class
-      $("div#api_status").addClass("available");
-    } else {
-      // API is not available, remove the "available" class
-      $("div#api_status").removeClass("available");
+  $.ajax({
+    method: 'GET',
+    url: 'http://localhost:5001/api/v1/status/',
+    success: function (data) {
+      if (data.status === 'OK') {
+        $('div#api_status').addClass('available');
+      }
+      else {
+        $('div#api_status').removeClass();
+      }
     }
   });
 });
